@@ -1,85 +1,106 @@
 #include <iostream>
 #include <fstream>
-#include <cctype> // helps in determining whether a character is a number or letter, and whether it is upper or lower case
+#include <cctype>
+#include <algorithm>
+
 using namespace std;
 
-//making a function for counting letters frequencies
-void letter_freq(const string& file_name)
+void count_frequencies(const string& file_name, int lowercase[], int uppercase[])
 {
-    unsigned int frequencies[26] = {0}; // Initializing an array to store the letter frequencies
+    //setting up arrays for both lower and upper letters
+    int lowercase[26] = {0};
+    int uppercase[26] = {0};
 
     ifstream file(file_name);
-    if (!file.is_open())
+    if(!file.is_open())
     {
-        cout << "This file does not exist. Please provide a valid file name.";
+        cout << "Invalid file name. Please enter a valid file name.";
         return;
     }
+
+    /*char ch;
+    if (ch >= 'A' && ch <= 'Z')       /****************************************
+        ++uppercase[ch - 'A'];        /Leaving this here just in case I need it
+    else if (ch >= 'a' && ch <= 'z')  /
+        ++lowercase[ch - 'a'];        /****************************************
+
+    file.close();*/
 
     char ch;
     while (file.get(ch))
     {
-        if (isalpha(ch))
+        if (isalpha(ch)) // if the character is an alpha
         {
-            ch = tolower(ch); // will turn the letters to lowercase
-            int index = ch - 'a';
-            frequencies[index]++;
+            if (ch >= 'A' && ch <= 'Z') // then if it's between these two values, add one to their respective frequency count
+                ++uppercase[ch - 'A'];
+            else if (ch >= 'a' && ch <= 'z') // same with this if statement
+                ++lowercase[ch - 'a'];
         }
     }
 
     file.close();
-    cout << "Frequencies for lowercase letters: ";
-
-    //Display the frequencies
-    for (int i = 0; i < 26; i++)
+    // prints out all of the frequencies after the file is closed.
+    cout << "The letter frequencies:" << endl;
+    for (int i = 0; i < 26; ++i)
     {
-        char letter = 'a' + i; //convert index back to letter
-        cout << letter << ": " << frequencies[i] << endl;
+        char letter = 'A' + i;
+        cout << letter << "(lowercase): " << lowercase[i] << endl;
+        letter = 'a' + i;
+        cout << letter << "(uppercase): " << uppercase[i] << endl;
     }
 }
 
-// a function for finding frequencies of uppercase letters
+//sorting the frequencies by ascending...hopefully
 
-void upper_freq(const string& file_name)
+void sort_frequencies(int lowercase[], int uppercase[])
 {
-    unsigned int upper_frequencies[26] = {0};
-
-    ifstream file(file_name);
-
-    if (!file.is_open())
+    // Sort lowercase letters by frequency
+    for (int i = 0; i < 25; ++i)
     {
-        cout <<"Unable to open the file. Please enter a valid file name.";
-        return;
-    }
-
-    char ch;
-    while (file.get(ch))
-    {
-        if (isalpha(ch))
+        for (int j = i + 1; j < 26; ++j)
         {
-            ch = toupper(ch); //convert letter to uppercase
-            int index = ch - 'A';
-            upper_frequencies[index]++;
+            if (lowercase[j] > lowercase[i])
+            {
+                swap(lowercase[i], lowercase[j]);
+                swap(uppercase[i], uppercase[j]);
+            }
         }
     }
 
-    file.close();
-
-    cout << "Letter Frequencies for uppercase letters: " << endl;
-    for (int i = 0; i < 26; i++)
+    // Sort uppercase letters by frequency
+    for (int i = 0; i < 25; ++i)
     {
-        char letter = 'A' + i;
-        cout << letter << ": " << upper_frequencies[i] << endl;
+        for (int j = i + 1; j < 26; ++j)
+        {
+            if (uppercase[j] > uppercase[i])
+            {
+                swap(lowercase[i], lowercase[j]);
+                swap(uppercase[i], uppercase[j]);
+            }
+        }
     }
 }
 
 int main()
 {
     string file_name = "Project02-input.txt";
-    cout << "Enter the file name: ";
+    cout << "Enter the name of the file: ";
     cin >> file_name;
 
-    letter_freq(file_name);
-    upper_freq(file_name);
+    count_frequencies(file_name);
+    sort_frequencies(lowercase, uppercase);
+
+    cout << "Letters sorted by frequency: " << endl;
+    for (int i = 0; i < 26; ++i)
+    {
+        if (lowercase[i] > 0)
+            cout << static_cast<char>('a' + i) << ": " << lowercase[i] << endl;
+    }
+    for (int i = 0; i < 26; ++i)
+    {
+        if (uppercase[i] > 0)
+            cout << static_cast<char>('A' + i) << ": " << uppercase[i] << endl;
+    }
 
     return 0;
 }
