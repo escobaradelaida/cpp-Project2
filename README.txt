@@ -1,4 +1,5 @@
 Command to run program:
 
-Windows and Linux share the same command of - 
-Compile = 'gcc Project2.cpp -o Project2.exe'
+Windows Powershell and Linux share the same command of - 
+Compile = 'gcc LetterFrequencies.cpp -o LetterFrequencies.exe'
+To run = "./LetterFrequencies.exe
