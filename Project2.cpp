@@ -8,8 +8,8 @@ using namespace std;
 void count_frequencies(const string& file_name, int lowercase[], int uppercase[])
 {
     //setting up arrays for both lower and upper letters
-    int lowercase[26] = {0};
-    int uppercase[26] = {0};
+    //int lowercase[26] = {0};
+    //int uppercase[26] = {0}; moved this to main function
 
     ifstream file(file_name);
     if(!file.is_open())
@@ -40,14 +40,14 @@ void count_frequencies(const string& file_name, int lowercase[], int uppercase[]
 
     file.close();
     // prints out all of the frequencies after the file is closed.
-    cout << "The letter frequencies:" << endl;
-    for (int i = 0; i < 26; ++i)
-    {
-        char letter = 'A' + i;
-        cout << letter << "(lowercase): " << lowercase[i] << endl;
-        letter = 'a' + i;
-        cout << letter << "(uppercase): " << uppercase[i] << endl;
-    }
+   // cout << "The letter frequencies:" << endl;
+   // for (int i = 0; i < 26; ++i)
+   // {
+   //     char letter = 'A' + i;
+   //     cout << letter << "(lowercase): " << lowercase[i] << endl;
+   //     letter = 'a' + i;
+   //     cout << letter << "(uppercase): " << uppercase[i] << endl;
+   // }
 }
 
 //sorting the frequencies by ascending...hopefully
@@ -87,7 +87,10 @@ int main()
     cout << "Enter the name of the file: ";
     cin >> file_name;
 
-    count_frequencies(file_name);
+    int lowercase[26] = {0};
+    int uppercase[26] = {0};
+
+    count_frequencies(file_name, lowercase, uppercase);
     sort_frequencies(lowercase, uppercase);
 
     cout << "Letters sorted by frequency: " << endl;
