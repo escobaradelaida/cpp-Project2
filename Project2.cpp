@@ -15,7 +15,7 @@ void count_frequencies(const string& file_name, int lowercase[], int uppercase[]
     if(!file.is_open())
     {
         cout << "Invalid file name. Please enter a valid file name.";
-        return;
+        exit(0); // return; did not stop the program if invalid file name was inputted
     }
 
     /*char ch;
